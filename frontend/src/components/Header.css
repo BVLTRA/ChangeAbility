@@ -1,0 +1,35 @@
+.viewport-header {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid #1f1f1f;
+  background-color: #FAFAF8;
+  backdrop-filter: blur(8px);
+  z-index: 5;
+}
+
+.current-page-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2D3748;
+  margin: 0;
+}
+
+.header-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #F6861F;
+  color: #000000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.header-action-btn:active { transform: scale(0.97); }

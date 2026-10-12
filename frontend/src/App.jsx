@@ -6,15 +6,15 @@ import Analytics from './pages/Analytics';
 import Account from './pages/Account';
 import ProtectedRoute from './components/ProtectedRoute';
 
-const isAuthenticated = () => {
-  return !!localStorage.getItem('gridlock_token');
-};
+// const isAuthenticated = () => {
+//   return !!localStorage.getItem('gridlock_token');
+// };
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <AuthFlow />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 

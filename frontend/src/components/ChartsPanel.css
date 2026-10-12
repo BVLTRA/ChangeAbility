@@ -1,0 +1,43 @@
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  height: 400px; 
+}
+
+.chart-panel {
+  background-color: #fffefe;
+  border: 1px solid #1f1f1f;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header { margin-bottom: 24px; }
+.chart-header h2 { font-size: 16px; font-weight: 600; color: #ffffff; margin: 0 0 4px 0; }
+.chart-header p { font-size: 12px; color: #888888; margin: 0; }
+.chart-wrapper { flex: 1; min-height: 0; }
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #1f1f1f;
+}
+
+.donut-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap; 
+}
+
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { display: block; width: 8px; height: 8px; border-radius: 50%; }
+.legend-label { font-size: 11px; font-weight: 500; color: #888888; }
+
+@media (max-width: 1024px) {
+  .charts-grid { grid-template-columns: 1fr; height: auto; }
+  .chart-panel { height: 400px; }
+}

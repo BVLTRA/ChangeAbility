@@ -4,7 +4,7 @@ import { BarChart, Bar, LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, X
 import GlowOrbs from '../components/GlowOrb';
 import './Analytics.css';
 
-import logo from "../assets/images/logo.svg"; 
+import logo from "../assets/images/logo.png"; 
 
 // --- ANIMATED COUNTER ---
 const AnimatedCounter = ({ end, duration = 1500, className, prefix = '', suffix = '' }) => {
