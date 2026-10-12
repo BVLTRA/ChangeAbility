@@ -1,0 +1,79 @@
+/* Util class for spacing between rows */
+.mt-24 {
+  margin-top: 24px;
+}
+
+/* --- ANALYTICS SPECIFIC GRID SYSTEM --- */
+.analytics-grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Symmetrical 50/50 split */
+  gap: 16px;
+  height: 380px; /* Locks all side-by-side charts to identical heights */
+}
+
+.analytics-grid-row.full-width {
+  grid-template-columns: 1fr;
+  height: auto; /* Lets the bottom chart specify its own height inline */
+}
+
+/* Reusing chart panel logic from Dashboard, ensuring flex properties are retained */
+.chart-panel {
+  background-color: #0a0a0a75;
+  border: 1px solid #1f1f1f;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  margin-bottom: 24px;
+}
+
+.chart-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+}
+
+.chart-header p {
+  font-size: 12px;
+  color: #888888;
+  margin: 0;
+}
+
+.chart-wrapper {
+  flex: 1; 
+  min-height: 0; 
+}
+
+/* Clean up Recharts Cartesian grid lines */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #1f1f1f;
+}
+
+/* Clean up default Legend */
+.recharts-default-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.recharts-legend-item-text {
+  color: #888 !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .analytics-grid-row {
+    grid-template-columns: 1fr; /* Stack vertically on smaller screens */
+    height: auto;
+  }
+  
+  .chart-panel {
+    height: 350px;
+    margin-bottom: 16px;
+  }
+}

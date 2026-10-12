@@ -1,0 +1,185 @@
+
+
+.account-layout {
+  min-height: 100vh;
+  color: #fff;
+  position: relative;
+}
+
+.account-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Reusable Glass Mechanism */
+.glass-panel {
+  background-color: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Identity Card */
+.identity-card {
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar-ring {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4ade80, #16a34a);
+  padding: 3px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+}
+
+.avatar-initials {
+  width: 100%;
+  height: 100%;
+  background-color: #111;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.operator-name {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.role-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.details-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.8rem;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.status-active {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+/* Telemetry Section */
+.telemetry-header {
+  font-size: 1.2rem;
+  margin: 0 0 1.5rem 0;
+  color: #fff;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.warning-tint { border-bottom: 3px solid #ffa500; }
+.success-tint { border-bottom: 3px solid #4ade80; }
+
+.stat-value {
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.system-info {
+  padding: 1.5rem;
+  color: #888;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.system-info h4 {
+  color: #bbb;
+  margin: 0 0 10px 0;
+}
+
+.loading-state {
+  color: #888;
+  font-style: italic;
+  padding: 2rem;
+}
+
+/* Responsive Breakpoint */
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
