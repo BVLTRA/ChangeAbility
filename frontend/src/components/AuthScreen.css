@@ -1,0 +1,207 @@
+/* Base container: Pure black background, full screen */
+.auth-container {
+  min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Two-column layout */
+.auth-content {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 5%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* --- LEFT SIDE: TYPOGRAPHY & INPUT --- */
+.text-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 500px;
+}
+
+.text-section h1 {
+  font-size: 4rem;
+  font-weight: 500;
+  line-height: 1.05;
+  text-align: left;
+  margin: 0;
+  letter-spacing: -0.04em;
+}
+
+.text-section p {
+  font-size: 1.125rem;
+  /* font-weight: 600; */
+  text-align: left;
+  color: #888888;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Input */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.email-input {
+  width: 100%;
+  height: 5px;
+  padding: 18px 24px 17px 24px;
+  border-radius: 15px;
+  background-color: #0a0a0a6b;
+  border: 1px solid #222;
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.email-input::placeholder {
+  color: #666666;
+}
+
+.email-input:focus {
+  background-color: #1a1a1a;
+  border-color: #2830ad;
+  /* border-color: #333333; */
+}
+
+/* --- RIGHT SIDE: THE CRAFTING GRID --- */
+.grid-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* The actual 3x3 grid */
+.crafting-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 400px;
+  height: 400px;
+}
+
+*/
+.grid-cell {
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+/* Remove the right border from the 3rd, 6th, and 9th cells (the right edge) */
+.grid-cell:nth-child(3n) {
+  border-right: none;
+}
+
+/* Remove the bottom border from the 7th, 8th, and 9th cells (the bottom edge) */
+.grid-cell:nth-child(n + 7) {
+  border-bottom: none;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 900px) {
+  .auth-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 4rem;
+  }
+
+  .text-section {
+    align-items: center;
+  }
+
+  .text-section h1 {
+    font-size: 3.5rem;
+  }
+}
+
+/* TOAST ANIMATION */
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* THE TOAST CONTAINER */
+.toast-message {
+  position: fixed;
+  top: 32px;
+  left: 50%;
+  /* translateX(-50%) perfectly centers a fixed element horizontally */
+  transform: translateX(-50%); 
+  z-index: 9999; /* Guarantees it floats above the orbs and the grid; can never be too sure */
+  
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.3px;
+  
+  /* Glassmorphism effect... [word of the day lol] */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  
+  /* Trigger the animation */
+  animation: slideDownFade 0.3s ease-out forwards;
+  
+  /* IMPORTANT: ensures the toast doesn't block the user from clicking 
+     things that are physically underneath it while it fades away */
+  pointer-events: none; 
+}
+
+/* Success State */
+.toast-success {
+  background-color: rgba(0, 255, 0, 0.1);
+  color: #4ade80; /* A high-visibility mint green */
+  border: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+/* Error State */
+.toast-error {
+  background-color: rgba(255, 77, 77, 0.1);
+  color: #ff8a8a; /* A soft, readable red */
+  border: 1px solid rgba(255, 77, 77, 0.2);
+}
+
+.login-box {
+  background-color: #111111b2; 
+  padding: 3rem; 
+  border-radius: 12px; 
+  border: 1px solid #333; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  max-width: 450px; 
+  width: 100%;
+  z-index: 10;
+}
+
+/* On mobile, strip the padding */
+@media (max-width: 600px) {
+  .login-box {
+    padding: 1.5rem;
+    background-color: transparent; 
+    border: none;
+  }
+}
