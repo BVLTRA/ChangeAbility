@@ -1,6 +1,6 @@
 .sidebar {
   width: 200px;
-  background-color: #FAFAF8; 
+  background-color: #0c0c0c; 
   border-right: 1px solid #1f1f1f;
   display: flex;
   flex-direction: column;
@@ -12,14 +12,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 30px;
+  padding: 0 20px;
   border-bottom: 1px solid #1f1f1f;
   color: #ffffff;
-}
-
-.sidebar-brand img {
-  height: 40px;
-  width: auto;
 }
 
 .brand-text {

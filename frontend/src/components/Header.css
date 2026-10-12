@@ -5,7 +5,7 @@
   align-items: center;
   padding: 0 24px;
   border-bottom: 1px solid #1f1f1f;
-  background-color: #FAFAF8;
+  background-color: rgba(5, 5, 5, 0.6);
   backdrop-filter: blur(8px);
   z-index: 5;
 }
@@ -13,7 +13,7 @@
 .current-page-title {
   font-size: 14px;
   font-weight: 500;
-  color: #2D3748;
+  color: #ffffff;
   margin: 0;
 }
 
@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background-color: #F6861F;
+  background-color: #ffffff;
   color: #000000;
   border: none;
   padding: 6px 12px;

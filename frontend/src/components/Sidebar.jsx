@@ -10,7 +10,7 @@ const Sidebar = ({ user }) => {
     <aside className="sidebar">
       <div className="sidebar-brand">
         <img src={logo} alt="Relay Logo" className="brand-logo" height="15" />
-        <span className="brand-text"></span>
+        <span className="brand-text">RELAY</span>
       </div>
 
       <nav className="sidebar-nav">

@@ -18,8 +18,8 @@
 
 /* Reusing chart panel logic from Dashboard, ensuring flex properties are retained */
 .chart-panel {
-  background-color: #fdfdfd;
-  border: 0px solid #1f1f1f;
+  background-color: #0a0a0aab;
+  border: 1px solid #1f1f1f;
   border-radius: 8px;
   padding: 24px;
   display: flex;
