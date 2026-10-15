@@ -4,7 +4,7 @@
   align-items: center;
   padding: 1rem 2rem;
   
-  /* The Glassmorphism Effect */
+  /* Glassmorphism Effect */
   background-color: rgba(10, 10, 10, 0.65); 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);

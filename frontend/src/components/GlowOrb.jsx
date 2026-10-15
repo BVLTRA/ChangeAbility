@@ -41,7 +41,7 @@ const GlowOrbs = () => {
         filter: 'blur(120px)',
         transform: 'translate(calc(-50% + var(--mouse-x, 0) * 40px), calc(-50% + var(--mouse-y, 0) * 40px))',
         transition: 'transform 0.8s ease-out',
-        willChange: 'transform' // Forces GPU acceleration
+        willChange: 'transform' 
       }} />
 
       {/* Orb 2 */}
@@ -54,7 +54,7 @@ const GlowOrbs = () => {
         filter: 'blur(80px)',
         transform: 'translate(calc(-50% + var(--mouse-x, 0) * 90px), calc(-50% + var(--mouse-y, 0) * 90px))',
         transition: 'transform 0.15s ease-out',
-        willChange: 'transform' // Forces GPU acceleration
+        willChange: 'transform' 
       }} />
     </div>
   );

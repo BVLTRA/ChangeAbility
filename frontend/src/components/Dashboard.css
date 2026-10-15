@@ -130,7 +130,7 @@
 
 /* TOP HEADER */
 .viewport-header {
-  height: 60px; /* Exact match to .sidebar-brand */
+  height: 60px; /* match to .sidebar-brand */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -362,7 +362,6 @@
   flex: 0 0 280px; 
   display: flex;
   flex-direction: column;
-  /* Removed the background-color and border-radius here */
 }
 
 .kanban-column-header {
@@ -587,7 +586,7 @@
   align-items: center;
   gap: 16px;
   margin-top: 20px;
-  flex-wrap: wrap; /* Allows it to wrap neatly on very small screens */
+  flex-wrap: wrap; 
 }
 
 .legend-item {

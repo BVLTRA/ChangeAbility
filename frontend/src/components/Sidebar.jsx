@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from "../assets/images/logo.png";
 import './Sidebar.css'; 
@@ -7,8 +7,12 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // State to handle the dropdown toggle
+  const [isPeopleMenuOpen, setIsPeopleMenuOpen] = useState(true);
+
   // Checks the current URL to highlight the active button
   const isActive = (path) => location.pathname === path ? 'active' : '';
+  const isPeopleActive = location.pathname.includes('/people');
 
   return (
     <aside className="sidebar">
@@ -22,6 +26,28 @@ const Sidebar = () => {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
           Dashboard
         </button>
+        {/* --- DROPDOWN NAVIGATION --- */}
+        <div className="nav-dropdown-group">
+          <button 
+            className={`nav-item ${isPeopleActive ? 'active' : ''}`} 
+            onClick={() => setIsPeopleMenuOpen(!isPeopleMenuOpen)}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span style={{ flex: 1, textAlign: 'left' }}>People</span>
+            <svg className={`chevron ${isPeopleMenuOpen ? 'open' : ''}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          {isPeopleMenuOpen && (
+            <div className="sub-nav">
+              <button className={`sub-nav-item ${isActive('/people/volunteers')}`} onClick={() => navigate('/people/volunteers')}>
+                Volunteers
+              </button>
+              <button className={`sub-nav-item ${isActive('/people/beneficiaries')}`} onClick={() => navigate('/people/beneficiaries')}>
+                Beneficiaries
+              </button>
+            </div>
+          )}
+        </div>
         <button className={`nav-item ${isActive('/report-issue')}`} onClick={() => navigate('/report-issue')}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           Report Issue
