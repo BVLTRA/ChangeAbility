@@ -9,8 +9,8 @@ const Sidebar = ({ user }) => {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <img src={logo} alt="Relay Logo" className="brand-logo" height="15" />
-        <span className="brand-text">RELAY</span>
+        <img src={logo} alt="Relay Logo" className="brand-logo" height="32" />
+        <span className="brand-text">ChangeAbility</span>
       </div>
 
       <nav className="sidebar-nav">
