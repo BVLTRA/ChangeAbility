@@ -11,9 +11,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
-  background-color: #ffefef; 
-  color: #000000;
+
+  background-color: #000000; 
+  color: #ffffff;
 }
 
 code {
@@ -21,36 +21,29 @@ code {
     monospace;
 }
 
-/* 1. Define the total width of the scrollbar interaction zone */
 .content-canvas::-webkit-scrollbar {
   width: 20px; 
 }
 
-/* 2. The Outer Pill (The Track) */
 .content-canvas::-webkit-scrollbar-track {
-  background-color: rgba(25, 25, 25, 0.5); /* Faint dark track */
-  border-radius: 100px; /* Maximum border-radius creates the pill shape */
+  background-color: rgba(25, 25, 25, 0.5); 
+  border-radius: 100px; 
   border: 6px solid #050505; 
   background-clip: padding-box;
 }
 
-/* 3. The Inner Pill (The Moving Thumb) */
 .content-canvas::-webkit-scrollbar-thumb {
   background-color: #444444; 
   border-radius: 100px;
   
-  /* We use a transparent border here to create internal padding 
-     between the moving thumb and the track holding it. */
   border: 7px solid transparent; 
   background-clip: padding-box; 
 }
 
-/* Optional: Slight highlight when actively hovering over the scrollbar */
 .content-canvas::-webkit-scrollbar-thumb:hover {
   background-color: #666666; 
 }
 
-/* For Firefox compatibility (Firefox doesn't support webkit pseudo-elements) */
 .content-canvas {
   scrollbar-width: thin;
   scrollbar-color: #444444 transparent;

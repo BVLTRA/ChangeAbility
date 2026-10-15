@@ -1,25 +1,25 @@
 import React from 'react';
-import './Dashboard.css'; 
+import './Dashboard.css';
 
-// Mechanism to calculate relative time (e.g., "2h ago", "3d ago")
 const timeAgo = (dateString) => {
   const seconds = Math.floor((new Date() - new Date(dateString)) / 1000);
-  
-  let interval = seconds / 86400; // Days
+  let interval = seconds / 86400; 
   if (interval > 1) return Math.floor(interval) + "d ago";
-  
-  interval = seconds / 3600; // Hours
+  interval = seconds / 3600; 
   if (interval > 1) return Math.floor(interval) + "h ago";
-  
-  interval = seconds / 60; // Minutes
+  interval = seconds / 60; 
   if (interval > 1) return Math.floor(interval) + "m ago";
-  
   return "Just now";
 };
 
+// Translator function for the CSS class
+const getVulnerabilityCssClass = (vuln) => {
+  const map = { 'Routine': 'low', 'Moderate': 'medium', 'High Need': 'high', 'Urgent': 'critical' };
+  return map[vuln] || 'low';
+};
+
 const IssueCard = ({ issue }) => {
-  // Map severity to a specific CSS class for coloring
-  const severityClass = `severity-badge severity-${issue.severity.toLowerCase()}`;
+  const severityClass = `severity-badge severity-${getVulnerabilityCssClass(issue.vulnerability)}`;
 
   return (
     <div className="issue-card">
@@ -29,7 +29,7 @@ const IssueCard = ({ issue }) => {
       </div>
       <h3 className="issue-title">{issue.title}</h3>
       <div className="issue-card-footer">
-        <span className={severityClass}>{issue.severity}</span>
+        <span className={severityClass}>{issue.vulnerability}</span>
       </div>
     </div>
   );

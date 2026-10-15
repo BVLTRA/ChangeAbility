@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import "./MetricsGrid.css";
+import React, { useState, useEffect } from 'react';
 
-const AnimatedCounter = ({ end, duration = 1500, className }) => {
+// --- ANIMATED COUNTER ---
+const AnimatedCounter = ({ end, duration = 1500, className, prefix = '', suffix = '' }) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -10,34 +10,37 @@ const AnimatedCounter = ({ end, duration = 1500, className }) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      setCount(Math.floor(ease * end));
+      setCount(ease * end);
       if (progress < 1) requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
   }, [end, duration]);
 
-  return <span className={className}>{count}</span>;
+  const displayValue = end % 1 !== 0 ? count.toFixed(1) : Math.floor(count).toLocaleString('en-US');
+  return <span className={className}>{prefix}{displayValue}{suffix}</span>;
 };
 
-const MetricsGrid = () => (
-  <div className="metrics-grid">
-    <div className="metric-card">
-      <span className="metric-label">Total Issues</span>
-      <AnimatedCounter end={121} className="metric-value" />
+const MetricsGrid = () => {
+  return (
+    <div className="metrics-grid">
+      <div className="metric-card">
+        <span className="metric-label">Total Cases</span>
+        <AnimatedCounter end={121} className="metric-value" />
+      </div>
+      <div className="metric-card">
+        <span className="metric-label">Urgent Needs</span>
+        <AnimatedCounter end={5} className="metric-value critical-text" />
+      </div>
+      <div className="metric-card">
+        <span className="metric-label">Active Cases</span>
+        <AnimatedCounter end={44} className="metric-value" />
+      </div>
+      <div className="metric-card">
+        <span className="metric-label">Assisted Cases</span>
+        <AnimatedCounter end={77} className="metric-value" />
+      </div>
     </div>
-    <div className="metric-card">
-      <span className="metric-label">Critical Issues</span>
-      <AnimatedCounter end={5} className="metric-value critical-text" />
-    </div>
-    <div className="metric-card">
-      <span className="metric-label">Open Issues</span>
-      <AnimatedCounter end={44} className="metric-value" />
-    </div>
-    <div className="metric-card">
-      <span className="metric-label">Resolved Issues</span>
-      <AnimatedCounter end={77} className="metric-value" />
-    </div>
-  </div>
-);
+  );
+};
 
 export default MetricsGrid;

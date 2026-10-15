@@ -1,26 +1,25 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import AuthFlow from './pages/AuthFlow';
 import Dashboard from './components/Dashboard';
+// import ReportIssue from './pages/ReportIssue'; 
 import Analytics from './pages/Analytics';
 import Account from './pages/Account';
-import ProtectedRoute from './components/ProtectedRoute';
-
-// const isAuthenticated = () => {
-//   return !!localStorage.getItem('gridlock_token');
-// };
+import MainLayout from './components/MainLayout';
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Instantly push anyone hitting the root URL into the dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-
-        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-
-        <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+        {/* Wrap all routes directly in the layout, bypassing auth guards */}
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/report-issue" element={<ReportIssue />} /> */}
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/account" element={<Account />} />
+        </Route>
       </Routes>
     </Router>
   );
