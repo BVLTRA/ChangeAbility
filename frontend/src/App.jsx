@@ -8,6 +8,7 @@ import Volunteers from './pages/Volunteers';
 import Beneficiaries from './pages/Beneficiaries';
 import CalendarView from './pages/CalendarView';
 import Reminders from './pages/Reminders';
+import AddBeneficiary from './pages/AddBeneficiary';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/people/beneficiaries" element={<Beneficiaries />} />
           <Route path="/calendar" element={<CalendarView />} />
           <Route path="/reminders" element={<Reminders />} />
+          <Route path="/add-beneficiary" element={<AddBeneficiary />} />
         </Route>
       </Routes>
     </Router>
