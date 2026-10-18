@@ -9,6 +9,7 @@ import Beneficiaries from './pages/Beneficiaries';
 import CalendarView from './pages/CalendarView';
 import Reminders from './pages/Reminders';
 import AddBeneficiary from './pages/AddBeneficiary';
+import ProfileView from './pages/ProfileView';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/calendar" element={<CalendarView />} />
           <Route path="/reminders" element={<Reminders />} />
           <Route path="/add-beneficiary" element={<AddBeneficiary />} />
+          <Route path="/profile" element={<ProfileView />} />
         </Route>
       </Routes>
     </Router>

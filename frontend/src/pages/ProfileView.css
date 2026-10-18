@@ -1,0 +1,245 @@
+/* --- HERO BANNER & HEADER CARD --- */
+.profile-cover-banner {
+  height: 180px;
+  width: 100%;
+  border-radius: 12px;
+  /* A subtle, dark gradient replacing the bright orange wavy banner */
+  background: linear-gradient(135deg, #111827 0%, #1e1b4b 100%);
+  border: 1px solid #1f1f1f;
+  margin-bottom: 0;
+}
+
+.profile-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0a0a0a;
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: -40px 24px 32px 24px; /* The negative top margin forces the overlap */
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar-large {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  background-color: #1f1f1f;
+  border: 2px solid #141414;
+}
+
+.profile-titles h2 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.profile-titles p {
+  margin: 0;
+  font-size: 13px;
+  color: #888888;
+}
+
+/* Tab Buttons */
+.profile-tabs {
+  display: flex;
+  background-color: #050505;
+  border: 1px solid #1f1f1f;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.profile-tab-btn {
+  background: transparent;
+  border: none;
+  color: #666;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-tab-btn:hover {
+  color: #aaa;
+}
+
+.profile-tab-btn.active {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+/* --- OVERVIEW GRID --- */
+.profile-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Forces exactly 3 equal columns */
+  gap: 20px;
+}
+
+.profile-card {
+  background-color: #0a0a0a;
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-card-header {
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.profile-bio {
+  font-size: 13px;
+  color: #888888;
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+}
+
+/* Column 1: Info Key-Values */
+.profile-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  font-size: 13px;
+}
+
+.detail-label {
+  color: #666666;
+  width: 90px;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #cccccc;
+}
+
+/* Column 2 & 3: Lists (Tasks / Teams) */
+.profile-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #141414;
+}
+
+.profile-list-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.list-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.event-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.event-indicator.type-event { background-color: #a855f7; }
+.event-indicator.type-task { background-color: #3b82f6; }
+
+.team-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  background-color: #1f1f1f;
+}
+
+.list-item-text h4 {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.list-item-text p {
+  margin: 0;
+  font-size: 11px;
+  color: #666666;
+}
+
+.list-item-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: #141414;
+  color: #888;
+}
+
+.view-action-btn {
+  background: transparent;
+  border: none;
+  color: #3b82f6;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.view-action-btn:hover {
+  color: #60a5fa;
+}
+
+/* Placeholder for unbuilt tabs */
+.placeholder-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 13px;
+  border: 1px dashed #1f1f1f;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 1024px) {
+  .profile-overview-grid {
+    grid-template-columns: 1fr; /* Stacks all 3 cards vertically on smaller screens */
+  }
+
+  .profile-header-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin: -30px 16px 24px 16px;
+  }
+
+  .profile-tabs {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
