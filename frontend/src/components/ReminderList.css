@@ -1,0 +1,140 @@
+.reminders-container {
+  background-color: #0a0a0a;
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.reminders-header {
+  margin-bottom: 24px;
+}
+
+.reminders-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.add-task-wrapper {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.add-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.add-task-input {
+  width: 100%;
+  background-color: #050505;
+  border: 1px dashed #333;
+  border-radius: 8px;
+  padding: 14px 16px 14px 40px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.add-task-input:focus {
+  border-color: #555;
+  border-style: solid;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background-color: #050505;
+  border: 1px solid #141414;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.task-row:hover {
+  background-color: #0a0a0a;
+  border-color: #1f1f1f;
+}
+
+.task-row.completed {
+  opacity: 0.5;
+}
+
+.checkbox-wrapper {
+  padding-top: 2px;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 2px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  transition: all 0.15s;
+}
+
+.custom-checkbox.checked {
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e0e0e0;
+  transition: color 0.2s;
+}
+
+.task-row.completed .task-text {
+  text-decoration: line-through;
+  color: #666;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.task-priority {
+  font-size: 10px;
+  font-weight: 600;
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}

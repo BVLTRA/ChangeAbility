@@ -6,6 +6,8 @@ import Dashboard from './components/Dashboard';
 import Analytics from './pages/Analytics';
 import Volunteers from './pages/Volunteers';
 import Beneficiaries from './pages/Beneficiaries';
+import CalendarView from './pages/CalendarView';
+import Reminders from './pages/Reminders';
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/people/volunteers" element={<Volunteers />} />
           <Route path="/people/beneficiaries" element={<Beneficiaries />} />
+          <Route path="/calendar" element={<CalendarView />} />
+          <Route path="/reminders" element={<Reminders />} />
         </Route>
       </Routes>
     </Router>
