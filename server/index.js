@@ -73,7 +73,6 @@ app.post('/api/beneficiaries', async (req, res) => {
 });
 
 // 2. Fetch all Beneficiaries (Used by Dashboard, Analytics, and Data Tables)
-// 2. Fetch all Beneficiaries
 app.get('/api/beneficiaries', async (req, res) => {
   try {
     const beneficiaries = await Beneficiary.find().sort({ createdAt: -1 }).lean();
@@ -86,7 +85,7 @@ app.get('/api/beneficiaries', async (req, res) => {
       need: b.disability?.category || 'General Support',
       subNeed: b.disability?.name || 'Pending assessment',
       status: b.status || 'Referral',
-      // Format the date to match your UI (DD/MM/YY)
+      // Format date (DD/MM/YY)
       date: new Date(b.createdAt).toLocaleDateString('en-GB'), 
       // Auto-generate an avatar with their initials
       avatar: `https://ui-avatars.com/api/?name=${b.personal?.firstName}+${b.personal?.lastName}&background=1f1f1f&color=fff`
@@ -95,6 +94,20 @@ app.get('/api/beneficiaries', async (req, res) => {
     res.status(200).json(tableData);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// 3. Fetch Single Beneficiary by ID
+app.get('/api/beneficiaries/:id', async (req, res) => {
+  try {
+    const beneficiary = await Beneficiary.findById(req.params.id).lean();
+    if (!beneficiary) {
+      return res.status(404).json({ error: 'Beneficiary not found' });
+    }
+    res.status(200).json(beneficiary);
+  } catch (error) {
+    console.error('Error fetching beneficiary:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

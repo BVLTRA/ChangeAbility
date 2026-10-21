@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import './DataTable.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./DataTable.css";
 
 const Beneficiaries = () => {
   // 1. Initialize an empty array to hold the database data
   const [beneficiaries, setBeneficiaries] = useState([]);
+  const navigate = useNavigate();
 
   // 2. Fetch the data the moment the component mounts
   useEffect(() => {
     const fetchBeneficiaries = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/beneficiaries');
+        const response = await fetch("http://localhost:5000/api/beneficiaries");
         const data = await response.json();
         setBeneficiaries(data); // Inject the database response into the state
       } catch (error) {
@@ -31,7 +33,16 @@ const Beneficiaries = () => {
           <div className="table-header-row">
             <h2>Beneficiaries Table</h2>
             <button className="filter-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
               Filter
             </button>
           </div>
@@ -52,7 +63,11 @@ const Beneficiaries = () => {
                 <tr key={person.id}>
                   <td>
                     <div className="person-cell">
-                      <img src={person.avatar} alt={person.name} className="avatar" />
+                      <img
+                        src={person.avatar}
+                        alt={person.name}
+                        className="avatar"
+                      />
                       <div className="info-stack">
                         <span className="primary-text">{person.name}</span>
                         <span className="secondary-text">{person.email}</span>
@@ -67,23 +82,39 @@ const Beneficiaries = () => {
                   </td>
                   <td>
                     {/* The status-pill CSS dynamically colors this based on the word */}
-                    <span className={`status-pill status-${person.status.toLowerCase().replace(' ', '-')}`}>
+                    <span
+                      className={`status-pill status-${person.status.toLowerCase().replace(" ", "-")}`}
+                    >
                       {person.status}
                     </span>
                   </td>
                   <td>
                     <span className="date-text">{person.date}</span>
                   </td>
-                  <td style={{ textAlign: 'right' }}>
-                    <button className="action-btn">View</button>
+                  <td style={{ textAlign: "right" }}>
+                    <button
+                      className="action-btn"
+                      onClick={() =>
+                        navigate(`/people/beneficiaries/${person.id}`)
+                      }
+                    >
+                      View
+                    </button>
                   </td>
                 </tr>
               ))}
-              
+
               {/* Optional: Show an empty state if the database is empty */}
               {beneficiaries.length === 0 && (
                 <tr>
-                  <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+                  <td
+                    colSpan="5"
+                    style={{
+                      textAlign: "center",
+                      padding: "40px",
+                      color: "#666",
+                    }}
+                  >
                     No beneficiaries registered yet.
                   </td>
                 </tr>
