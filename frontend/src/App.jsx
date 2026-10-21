@@ -1,5 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+
+import AuthFlow from './pages/AuthFlow';
 import MainLayout from './components/MainLayout';
 import Dashboard from './components/Dashboard';
 // import ReportIssue from './pages/ReportIssue'; 
@@ -15,21 +19,35 @@ import BeneficiaryProfile from './pages/BeneficiaryProfile';
 const App = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route element={<MainLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* <Route path="/report-issue" element={<ReportIssue />} /> */}
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/people/volunteers" element={<Volunteers />} />
-          <Route path="/people/beneficiaries" element={<Beneficiaries />} />
-          <Route path="/calendar" element={<CalendarView />} />
-          <Route path="/reminders" element={<Reminders />} />
-          <Route path="/add-beneficiary" element={<AddBeneficiary />} />
-          <Route path="/profile" element={<ProfileView />} />
-          <Route path="/people/beneficiaries/:id" element={<BeneficiaryProfile />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          {/* Public Auth Route */}
+          <Route path="/auth" element={<AuthFlow />} />
+          
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          
+          {/* Protected Routes Block */}
+          {/* Wrap MainLayout inside ProtectedRoute so the Sidebar only loads if logged in */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/people/volunteers" element={<Volunteers />} />
+              <Route path="/people/beneficiaries" element={<Beneficiaries />} />
+              <Route path="/people/beneficiaries/:id" element={<BeneficiaryProfile />} />
+              <Route path="/profile" element={<ProfileView />} />
+              <Route path="/calendar" element={<CalendarView />} />
+              <Route path="/reminders" element={<Reminders />} />
+              
+              {/* Admin-only route inside the protected layout */}
+              <Route element={<ProtectedRoute adminOnly={true} />}>
+                <Route path="/add-beneficiary" element={<AddBeneficiary />} />
+              </Route>
+            </Route>
+          </Route>
+
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 };
