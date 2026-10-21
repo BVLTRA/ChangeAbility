@@ -1,0 +1,188 @@
+/* --- HEADER MODS --- */
+.header-left-cluster {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  background: transparent;
+  border: 1px solid #333;
+  color: #ccc;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #1a1a1a;
+  color: #fff;
+  border-color: #555;
+}
+
+/* --- REUSED PROFILE STRUCTURE --- */
+.profile-cover-banner {
+  height: 180px;
+  width: 100%;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #111827 0%, #1e1b4b 100%);
+  border: 1px solid #1f1f1f;
+}
+
+.profile-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0a0a0a;
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: -40px 24px 32px 24px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar-large {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  background-color: #1f1f1f;
+  border: 2px solid #141414;
+}
+
+.profile-titles h2 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.profile-titles p {
+  margin: 0;
+  font-size: 11px;
+  color: #666;
+  font-family: monospace;
+}
+
+.profile-status-cluster {
+  display: flex;
+  gap: 12px;
+}
+
+/* --- GRID LAYOUT --- */
+.profile-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.profile-card {
+  background-color: #0a0a0a;
+  border: 1px solid #1f1f1f;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-card-header {
+  margin: 0 0 20px 0;
+  font-size: 15px;
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom: 1px solid #1f1f1f;
+  padding-bottom: 12px;
+}
+
+/* --- DATA FIELDS --- */
+.profile-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  font-size: 13px;
+}
+
+.block-row {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-label {
+  color: #666666;
+  width: 100px;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #cccccc;
+  line-height: 1.4;
+}
+
+.detail-text-block {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+  line-height: 1.5;
+  background-color: #111;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px dashed #222;
+}
+
+.detail-divider {
+  height: 1px;
+  background-color: #1f1f1f;
+  margin: 4px 0;
+}
+
+.alert-text {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.mt-4 { margin-top: 4px; }
+
+/* Status Pill Imports (Fallback matching) */
+.status-pill {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-referral, .status-routine { background-color: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+.status-assessed, .status-moderate { background-color: rgba(250, 204, 21, 0.1); color: #facc15; border: 1px solid rgba(250,204,21,0.2); }
+.status-in-support, .status-high-need { background-color: rgba(251, 146, 60, 0.1); color: #fb923c; border: 1px solid rgba(251,146,60,0.2); }
+.status-assisted, .status-closed { background-color: #1a1a1a; color: #888; border: 1px solid #333; }
+.status-urgent { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+
+@media (max-width: 1024px) {
+  .profile-overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-header-card {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: -30px 16px 24px 16px;
+  }
+}
