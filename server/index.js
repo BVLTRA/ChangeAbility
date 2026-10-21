@@ -26,8 +26,8 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/changeabili
 // --- ROUTES ---
 
 // AUTHENTICATION & RBAC ROUTES
-// 1. ADMIN INVITES A VOLUNTEER
-// Protected route: Only Admins can hit this endpoint
+  // 1. ADMIN INVITES A VOLUNTEER
+  // Protected route: Only Admins can hit this endpoint
 app.post('/api/auth/invite', verifyToken, requireAdmin, async (req, res) => {
   try {
     const { email, role } = req.body;
@@ -49,8 +49,8 @@ app.post('/api/auth/invite', verifyToken, requireAdmin, async (req, res) => {
   }
 });
 
-// 2. VOLUNTEER CLAIMS THEIR ACCOUNT
-// Open route: The volunteer is unauthenticated at this point
+  // 2. VOLUNTEER CLAIMS THEIR ACCOUNT
+  // Open route: The volunteer is unauthenticated at this point
 app.post('/api/auth/claim', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -73,8 +73,8 @@ app.post('/api/auth/claim', async (req, res) => {
   }
 });
 
-// 3. LOGIN CIRCUIT
-// Open route: Returns the JWT if credentials match
+  // 3. LOGIN CIRCUIT
+  // Open route: Returns the JWT if credentials match
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -107,7 +107,7 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// 4. FETCH ALL USERS (Admin Only)
+  // 4. FETCH ALL USERS (Admin Only)
 app.get('/api/users', verifyToken, requireAdmin, async (req, res) => {
   try {
     const users = await User.find().sort({ createdAt: -1 }).lean();
@@ -130,8 +130,37 @@ app.get('/api/users', verifyToken, requireAdmin, async (req, res) => {
 });
 
 
+// ADMIN ONLY ROUTES
+  // FETCH SINGLE USER PROFILE (Admin Only)
+app.get('/api/users/:id', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).lean();
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    
+    // Send back the raw data without the password hash
+    const { password, ...safeUserData } = user;
+    res.status(200).json(safeUserData);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch user profile.' });
+  }
+});
+
+  // DELETE A BENEFICIARY (Admin Only)
+app.delete('/api/beneficiaries/:id', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const deletedRecord = await Beneficiary.findByIdAndDelete(req.params.id);
+    if (!deletedRecord) return res.status(404).json({ error: 'Record not found' });
+    
+    res.status(200).json({ message: 'Beneficiary deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete record.' });
+  }
+});
+
+
+
 // BENEFICIARY ROUTES
-// 1. Create new Beneficiary (Triggered by AddBeneficiary.jsx)
+  // 1. Create new Beneficiary (Triggered by AddBeneficiary.jsx)
 app.post('/api/beneficiaries', verifyToken, requireAdmin, async (req, res) => {
   try {
     const data = req.body;
@@ -185,7 +214,7 @@ app.post('/api/beneficiaries', verifyToken, requireAdmin, async (req, res) => {
   }
 });
 
-// 2. Fetch all Beneficiaries (Used by Dashboard, Analytics, and Data Tables)
+  // 2. Fetch all Beneficiaries (Used by Dashboard, Analytics, and Data Tables)
 app.get('/api/beneficiaries', async (req, res) => {
   try {
     const beneficiaries = await Beneficiary.find().sort({ createdAt: -1 }).lean();
@@ -211,7 +240,7 @@ app.get('/api/beneficiaries', async (req, res) => {
   }
 });
 
-// 3. Fetch Single Beneficiary by ID
+  // 3. Fetch Single Beneficiary by ID
 app.get('/api/beneficiaries/:id', async (req, res) => {
   try {
     const beneficiary = await Beneficiary.findById(req.params.id).lean();
