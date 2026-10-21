@@ -56,10 +56,28 @@ const AddBeneficiary = () => {
     emergencyName: '', emergencyPhone: '', emergencyEmail: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Beneficiary Data Payload:", formData);
-    // API logic goes here boy... yea, you heard me
+    
+    try {
+      // Shoot the data to your local backend
+      const response = await fetch('http://localhost:5000/api/beneficiaries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        // If it saves successfully, instantly route the user to the table to see it
+        navigate('/people/beneficiaries');
+      } else {
+        console.error('Failed to save beneficiary to database');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
   };
 
   return (

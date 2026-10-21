@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './DataTable.css';
 
-const beneficiariesData = [
-  { id: 1, name: 'Sipho Ndlovu', email: 'sipho.n@example.com', need: 'Housing Support', subNeed: 'Emergency Placement', status: 'Active', date: '22/10/26', avatar: 'https://i.pravatar.cc/150?u=b042581f4e29026024d' },
-  { id: 2, name: 'Lerato Molefe', email: 'lerato.m@example.com', need: 'Food Security', subNeed: 'Monthly Parcel', status: 'Wait', date: '18/10/26', avatar: 'https://i.pravatar.cc/150?u=b042581f4e29026704d' },
-  { id: 3, name: 'Amina Patel', email: 'amina.p@example.com', need: 'Medical Transport', subNeed: 'Dialysis Route', status: 'Active', date: '15/10/26', avatar: 'https://i.pravatar.cc/150?u=b04258114e29026702d' },
-];
-
 const Beneficiaries = () => {
+  // 1. Initialize an empty array to hold the database data
+  const [beneficiaries, setBeneficiaries] = useState([]);
+
+  // 2. Fetch the data the moment the component mounts
+  useEffect(() => {
+    const fetchBeneficiaries = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/beneficiaries');
+        const data = await response.json();
+        setBeneficiaries(data); // Inject the database response into the state
+      } catch (error) {
+        console.error("Failed to fetch beneficiaries:", error);
+      }
+    };
+
+    fetchBeneficiaries();
+  }, []);
+
   return (
     <>
       <header className="viewport-header">
@@ -30,12 +42,13 @@ const Beneficiaries = () => {
                 <th>People</th>
                 <th>Primary Need</th>
                 <th>Status</th>
-                <th>Last Contact</th>
+                <th>Created</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {beneficiariesData.map((person) => (
+              {/* 3. Map over the live state instead of dummy data */}
+              {beneficiaries.map((person) => (
                 <tr key={person.id}>
                   <td>
                     <div className="person-cell">
@@ -53,7 +66,8 @@ const Beneficiaries = () => {
                     </div>
                   </td>
                   <td>
-                    <span className={`status-pill status-${person.status.toLowerCase()}`}>
+                    {/* The status-pill CSS dynamically colors this based on the word */}
+                    <span className={`status-pill status-${person.status.toLowerCase().replace(' ', '-')}`}>
                       {person.status}
                     </span>
                   </td>
@@ -65,6 +79,15 @@ const Beneficiaries = () => {
                   </td>
                 </tr>
               ))}
+              
+              {/* Optional: Show an empty state if the database is empty */}
+              {beneficiaries.length === 0 && (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+                    No beneficiaries registered yet.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
