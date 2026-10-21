@@ -107,6 +107,28 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+// 4. FETCH ALL USERS (Admin Only)
+app.get('/api/users', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 }).lean();
+    
+    const tableData = users.map(u => ({
+      id: u._id,
+      name: u.personal?.firstName ? `${u.personal.firstName} ${u.personal.lastName}` : 'Pending Name',
+      email: u.email,
+      role: u.role,
+      subRole: u.teamRole,
+      status: u.status,
+      date: new Date(u.createdAt).toLocaleDateString('en-GB'),
+      avatar: `https://ui-avatars.com/api/?name=${u.email}&background=1f1f1f&color=fff`
+    }));
+
+    res.status(200).json(tableData);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users.' });
+  }
+});
+
 
 // BENEFICIARY ROUTES
 // 1. Create new Beneficiary (Triggered by AddBeneficiary.jsx)

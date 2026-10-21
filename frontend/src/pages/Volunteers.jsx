@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import './DataTable.css';
 
-const volunteersData = [
-  { id: 1, name: 'Esthera Jackson', email: 'esthera@simmmple.com', role: 'Awareness', subRole: 'Vision', status: 'Active', date: '14/06/21', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d' },
-  { id: 2, name: 'Alexa Liras', email: 'alexa@simmmple.com', role: 'Awareness', subRole: 'Handicap', status: 'Wait', date: '14/06/21', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d' },
-  { id: 3, name: 'Laurent Michael', email: 'laurent@simmmple.com', role: 'Chef', subRole: 'Kitchen', status: 'Active', date: '14/06/21', avatar: 'https://i.pravatar.cc/150?u=a04258114e29026702d' },
-  { id: 4, name: 'Freduardo Hill', email: 'freduardo@simmmple.com', role: 'Admin', subRole: 'Accounting', status: 'Active', date: '14/06/21', avatar: 'https://i.pravatar.cc/150?u=a048581f4e29026701d' },
-  { id: 5, name: 'Daniel Thomas', email: 'daniel@simmmple.com', role: 'Team Lead', subRole: 'Activations', status: 'Wait', date: '14/06/21', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026703d' },
-  { id: 6, name: 'Mark Wilson', email: 'mark@simmmple.com', role: 'Team Lead', subRole: 'Activations', status: 'Wait', date: '14/06/21', avatar: 'https://i.pravatar.cc/150?u=a04258a2462d826712d' },
-];
-
 const Volunteers = () => {
+  const [volunteers, setVolunteers] = useState([]);
+  const navigate = useNavigate();
+  const { token } = useContext(AuthContext); // Extract the JWT
+
+  useEffect(() => {
+    const fetchVolunteers = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/users', {
+          headers: {
+            'Authorization': `Bearer ${token}` // Injecting the wristband
+          }
+        });
+        const data = await response.json();
+        setVolunteers(data);
+      } catch (error) {
+        console.error("Failed to fetch volunteers:", error);
+      }
+    };
+
+    if (token) fetchVolunteers();
+  }, [token]);
+
   return (
     <>
       <header className="viewport-header">
@@ -20,11 +35,20 @@ const Volunteers = () => {
       <section className="content-canvas">
         <div className="table-container">
           <div className="table-header-row">
-            <h2>Volunteers Table</h2>
-            <button className="filter-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-              Filter
-            </button>
+            <h2>Volunteers & Admins</h2>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button className="filter-btn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                Filter
+              </button>
+              <button 
+                className="filter-btn" 
+                style={{ backgroundColor: '#fff', color: '#000', borderColor: '#fff' }}
+                onClick={() => navigate('/invite-volunteer')}
+              >
+                + Invite
+              </button>
+            </div>
           </div>
 
           <table className="custom-table">
@@ -33,12 +57,12 @@ const Volunteers = () => {
                 <th>People</th>
                 <th>Role</th>
                 <th>Status</th>
-                <th>Last worked</th>
+                <th>Added</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {volunteersData.map((volunteer) => (
+              {volunteers.map((volunteer) => (
                 <tr key={volunteer.id}>
                   <td>
                     <div className="person-cell">
@@ -68,6 +92,14 @@ const Volunteers = () => {
                   </td>
                 </tr>
               ))}
+              
+              {volunteers.length === 0 && (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+                    No personnel records found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

@@ -8,6 +8,7 @@ import MainLayout from './components/MainLayout';
 import Dashboard from './components/Dashboard';
 // import ReportIssue from './pages/ReportIssue'; 
 import Analytics from './pages/Analytics';
+import InviteVolunteer from './pages/InviteVolunteer';
 import Volunteers from './pages/Volunteers';
 import Beneficiaries from './pages/Beneficiaries';
 import CalendarView from './pages/CalendarView';
@@ -42,6 +43,7 @@ const App = () => {
               {/* Admin-only route inside the protected layout */}
               <Route element={<ProtectedRoute adminOnly={true} />}>
                 <Route path="/add-beneficiary" element={<AddBeneficiary />} />
+                <Route path="/invite-volunteer" element={<InviteVolunteer />} />
               </Route>
             </Route>
           </Route>

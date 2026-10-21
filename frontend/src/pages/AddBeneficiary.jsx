@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
+
 import './ReportIssue.css'; 
 
 // --- CUSTOM DROPDOWN ---
@@ -36,6 +38,7 @@ const CustomSelect = ({ options, value, onChange, placeholder }) => {
 
 const AddBeneficiary = () => {
   const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
   const dateInputRef = useRef(null);
   
   // State Schema
@@ -65,6 +68,7 @@ const AddBeneficiary = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Inject the JWT for authentication
         },
         body: JSON.stringify(formData)
       });
