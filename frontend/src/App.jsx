@@ -18,6 +18,7 @@ import ProfileView from './pages/ProfileView';
 import BeneficiaryProfile from './pages/BeneficiaryProfile';
 import Teams from './pages/Teams';
 import CreateTeam from './pages/CreateTeam';
+import TeamDetail from './pages/TeamDetail';
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
               <Route path="/calendar" element={<CalendarView />} />
               <Route path="/reminders" element={<Reminders />} />
               <Route path="/teams" element={<Teams />} />
+              <Route path="/teams/:id" element={<TeamDetail />} />
               
               {/* Admin-only route inside the protected layout */}
               <Route element={<ProtectedRoute adminOnly={true} />}>

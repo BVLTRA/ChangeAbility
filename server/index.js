@@ -5,11 +5,12 @@ require('dotenv').config();
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('./models/User');
 const { verifyToken, requireAdmin } = require('./middleware/auth');
 
+const User = require('./models/User');
 const Beneficiary = require('./models/Beneficiary');
 const Team = require('./models/Team');
+const Project = require('./models/Project');
 
 const app = express();
 
@@ -257,6 +258,7 @@ app.get('/api/beneficiaries/:id', async (req, res) => {
 
 
 // TEAMS & PROJECTS ROUTES
+  //TEAMS
   // 1. CREATE A TEAM (Admin Only)
 app.post('/api/teams', verifyToken, requireAdmin, async (req, res) => {
   try {
@@ -289,6 +291,49 @@ app.get('/api/teams', verifyToken, async (req, res) => {
     res.status(200).json(teams);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch teams.' });
+  }
+});
+
+  // 3. FETCH A SINGLE TEAM BY ID
+app.get('/api/teams/:id', verifyToken, async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id)
+      .populate('lead', 'personal.firstName personal.lastName email role')
+      .populate('members', 'personal.firstName personal.lastName email role status')
+      .lean();
+
+    if (!team) return res.status(404).json({ error: 'Team not found' });
+    res.status(200).json(team);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch team details.' });
+  }
+});
+
+
+  // PROJECTS
+  // 1. CREATE A PROJECT (Admin Only)
+app.post('/api/projects', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const newProject = new Project(req.body);
+    await newProject.save();
+    res.status(201).json({ message: 'Project established successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create project.' });
+  }
+});
+
+  // 2. FETCH ALL PROJECTS (Open to authenticated users)
+app.get('/api/projects', verifyToken, async (req, res) => {
+  try {
+    const projects = await Project.find()
+      .populate('assignedTeams', 'name')
+      .populate('targetBeneficiaries', 'personal.firstName personal.lastName status')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json(projects);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch projects.' });
   }
 });
 
