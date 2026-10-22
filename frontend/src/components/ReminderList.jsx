@@ -1,32 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import './ReminderList.css';
 
-const initialReminders = [
-  { id: 1, text: 'Finalize quarterly budget report', time: 'Today, 2:00 PM', priority: 'High', completed: false },
-  { id: 2, text: 'Email vendor regarding the delayed shipment', time: 'Tomorrow', priority: 'Normal', completed: false },
-  { id: 3, text: 'Draft update for the volunteer portal', time: 'Oct 20', priority: 'Normal', completed: true },
-  { id: 4, text: 'Review new case assignments', time: 'Oct 22', priority: 'High', completed: false }
-];
-
 const ReminderList = () => {
-  const [reminders, setReminders] = useState(initialReminders);
+  const { token, user } = useContext(AuthContext);
+  const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
-  const toggleReminder = (id) => {
-    setReminders(reminders.map(r => r.id === id ? { ...r, completed: !r.completed } : r));
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/events', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // Keep only Personal Tasks assigned to this specific user
+          setTasks(data.filter(e => e.type === 'Task' && e.owner === user.id));
+        }
+      } catch (error) {
+        console.error("Failed to load tasks");
+      }
+    };
+    if (token) fetchTasks();
+  }, [token, user.id]);
+
+  const toggleTask = async (id) => {
+    // Optimistic UI update for instant feedback
+    setTasks(tasks.map(t => t._id === id ? { ...t, completed: !t.completed } : t));
+
+    // Backend sync
+    await fetch(`http://localhost:5000/api/events/${id}/toggle`, {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
   };
 
-  const addReminder = (e) => {
+  const addTask = async (e) => {
     if (e.key === 'Enter' && newTask.trim() !== '') {
-      const newReminder = {
-        id: Date.now(),
-        text: newTask,
-        time: 'No date',
-        priority: 'Normal',
-        completed: false
+      const payload = {
+        title: newTask,
+        type: 'Task',
+        visibility: 'Personal',
+        date: new Date().toISOString()
       };
-      setReminders([newReminder, ...reminders]);
-      setNewTask('');
+
+      try {
+        const response = await fetch('http://localhost:5000/api/events', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const savedTask = await response.json();
+          setTasks([...tasks, savedTask]);
+          setNewTask('');
+        }
+      } catch (error) {
+        console.error("Failed to save quick task");
+      }
     }
   };
 
@@ -41,36 +77,38 @@ const ReminderList = () => {
         <input 
           type="text" 
           className="add-task-input" 
-          placeholder="Add a new reminder and press Enter..." 
+          placeholder="Quick add a new reminder and press Enter..." 
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
-          onKeyDown={addReminder}
+          onKeyDown={addTask}
         />
       </div>
 
       <div className="task-list">
-        {reminders.map(reminder => (
-          <div key={reminder.id} className={`task-row ${reminder.completed ? 'completed' : ''}`}>
-            
-            <div className="checkbox-wrapper" onClick={() => toggleReminder(reminder.id)}>
-              <div className={`custom-checkbox ${reminder.completed ? 'checked' : ''}`}>
-                {reminder.completed && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+        {tasks.map(task => {
+          const taskDate = new Date(task.date).toLocaleDateString('en-GB');
+          return (
+            <div key={task._id} className={`task-row ${task.completed ? 'completed' : ''}`}>
+              <div className="checkbox-wrapper" onClick={() => toggleTask(task._id)}>
+                <div className={`custom-checkbox ${task.completed ? 'checked' : ''}`}>
+                  {task.completed && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                </div>
+              </div>
+
+              <div className="task-details">
+                <span className="task-text">{task.title}</span>
+                <div className="task-meta">
+                  <span className="task-time">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    {taskDate}
+                  </span>
+                </div>
               </div>
             </div>
-
-            <div className="task-details">
-              <span className="task-text">{reminder.text}</span>
-              <div className="task-meta">
-                <span className="task-time">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  {reminder.time}
-                </span>
-                {reminder.priority === 'High' && <span className="task-priority">High Priority</span>}
-              </div>
-            </div>
-
-          </div>
-        ))}
+          );
+        })}
+        
+        {tasks.length === 0 && <p style={{ color: '#666', fontSize: '13px', textAlign: 'center' }}>No pending tasks.</p>}
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import CreateTeam from './pages/CreateTeam';
 import TeamDetail from './pages/TeamDetail';
 import Projects from './pages/Projects';
 import CreateProject from './pages/CreateProject';
+import CreateEvent from './pages/CreateEvent';
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
               <Route path="/teams" element={<Teams />} />
               <Route path="/teams/:id" element={<TeamDetail />} />
               <Route path="/projects" element={<Projects />} />
+              <Route path="/create-event" element={<CreateEvent />} />
               
               {/* Admin-only route inside the protected layout */}
               <Route element={<ProtectedRoute adminOnly={true} />}>

@@ -1,25 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import './CalendarGrid.css';
 
-const mockEvents = [
-  { id: 1, date: 5, title: 'Volunteer Orientation', type: 'event' },
-  { id: 2, date: 12, title: 'Food Drive Setup', type: 'activity' },
-  { id: 3, date: 18, title: 'Community Outreach', type: 'event' },
-  { id: 4, date: 24, title: 'Monthly Review', type: 'meeting' }
-];
-
 const CalendarGrid = () => {
-  // Mechanical setup for a standard 31-day month starting on a Wednesday (adjust as needed)
-  const daysInMonth = 31;
-  const startingDayOfWeek = 3; // 0 = Sunday, 3 = Wednesday
+  const { token } = useContext(AuthContext);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/events', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // Filter out checklist tasks, keeping only Calendar-worthy items
+          setEvents(data.filter(e => e.type !== 'Task'));
+        }
+      } catch (error) {
+        console.error("Failed to load events");
+      }
+    };
+    if (token) fetchEvents();
+  }, [token]);
+
+  // Calendar Mechanics
+  const currentDate = new Date(); // Currently tracking live month
+  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+  const startingDayOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
   
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const blanks = Array.from({ length: startingDayOfWeek }, (_, i) => i);
+  const monthName = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
     <div className="calendar-container">
       <div className="calendar-header">
-        <h2>October 2026</h2>
+        <h2>{monthName}</h2>
         <div className="calendar-nav">
           <button className="nav-arrow">&lt;</button>
           <button className="nav-arrow">&gt;</button>
@@ -27,28 +44,30 @@ const CalendarGrid = () => {
       </div>
 
       <div className="calendar-grid">
-        {/* Weekday Headers */}
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
           <div key={day} className="weekday-header">{day}</div>
         ))}
 
-        {/* Padding for the start of the month */}
         {blanks.map(blank => (
           <div key={`blank-${blank}`} className="calendar-cell empty"></div>
         ))}
 
-        {/* Actual Days */}
         {days.map(day => {
-          const dayEvents = mockEvents.filter(e => e.date === day);
-          const isToday = day === 17; // Mocking today's date
+          // Find events that happen on this specific day
+          const dayEvents = events.filter(e => {
+            const eventDate = new Date(e.date);
+            return eventDate.getDate() === day && eventDate.getMonth() === currentDate.getMonth();
+          });
+          
+          const isToday = day === currentDate.getDate();
 
           return (
             <div key={day} className={`calendar-cell ${isToday ? 'today' : ''}`}>
               <span className="day-number">{day}</span>
               <div className="day-events">
                 {dayEvents.map(event => (
-                  <div key={event.id} className={`event-pill type-${event.type}`}>
-                    {event.title}
+                  <div key={event._id} className={`event-pill type-${event.type.toLowerCase()}`}>
+                    {event.visibility === 'Global' ? '🌐 ' : ''}{event.title}
                   </div>
                 ))}
               </div>

@@ -11,6 +11,7 @@ const User = require('./models/User');
 const Beneficiary = require('./models/Beneficiary');
 const Team = require('./models/Team');
 const Project = require('./models/Project');
+const Event = require('./models/Event');
 
 const app = express();
 
@@ -334,6 +335,82 @@ app.get('/api/projects', verifyToken, async (req, res) => {
     res.status(200).json(projects);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch projects.' });
+  }
+});
+
+
+// CALENDAR & TASKS ROUTES
+  // 1. CREATE AN EVENT OR TASK
+app.post('/api/events', verifyToken, async (req, res) => {
+  try {
+    const { title, type, visibility, date } = req.body;
+
+    // Security Check: Only Admins can create Global events
+    if (visibility === 'Global' && req.user.role !== 'Admin') {
+      return res.status(403).json({ error: 'Only administrators can create global events.' });
+    }
+
+    const newEvent = new Event({
+      title,
+      type,
+      visibility,
+      date,
+      owner: req.user.id
+    });
+
+    const savedEvent = await newEvent.save();
+    res.status(201).json(savedEvent);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create event.' });
+  }
+});
+
+  // 2. FETCH EVENTS (With RBAC Filtering)
+app.get('/api/events', verifyToken, async (req, res) => {
+  try {
+    const { targetUserId } = req.query;
+    let query = {};
+
+    if (targetUserId) {
+      // If an Admin is looking at a specific Volunteer's profile calendar
+      if (req.user.role !== 'Admin' && targetUserId !== req.user.id) {
+        return res.status(403).json({ error: 'Clearance denied. Admins only.' });
+      }
+      query.owner = targetUserId;
+    } else {
+      // Default Dashboard/Calendar query: All Global events + Your Personal events
+      query = {
+        $or: [
+          { visibility: 'Global' },
+          { owner: req.user.id }
+        ]
+      };
+    }
+
+    const events = await Event.find(query).sort({ date: 1 }).lean();
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch events.' });
+  }
+});
+
+  // 3. TOGGLE TASK COMPLETION
+app.put('/api/events/:id/toggle', verifyToken, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ error: 'Task not found.' });
+
+    // Security Check: Only the owner or an Admin can mark a task complete
+    if (event.owner.toString() !== req.user.id && req.user.role !== 'Admin') {
+      return res.status(403).json({ error: 'Permission denied.' });
+    }
+
+    event.completed = !event.completed;
+    await event.save();
+    
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update task.' });
   }
 });
 
