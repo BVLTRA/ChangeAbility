@@ -12,6 +12,7 @@ const Beneficiary = require('./models/Beneficiary');
 const Team = require('./models/Team');
 const Project = require('./models/Project');
 const Event = require('./models/Event');
+const Report = require('./models/Report');
 
 const app = express();
 
@@ -411,6 +412,58 @@ app.put('/api/events/:id/toggle', verifyToken, async (req, res) => {
     res.status(200).json(event);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update task.' });
+  }
+});
+
+
+// REPORTS & TICKETING ROUTES
+  // 1. SUBMIT A NEW REPORT (Open to all authenticated users)
+app.post('/api/reports', verifyToken, async (req, res) => {
+  try {
+    const { title, description, category } = req.body;
+    
+    const newReport = new Report({
+      title,
+      description,
+      category,
+      submittedBy: req.user.id
+    });
+
+    await newReport.save();
+    res.status(201).json({ message: 'Report submitted successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to submit report.' });
+  }
+});
+
+  // 2. FETCH ALL REPORTS (Admin Only)
+app.get('/api/reports', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const reports = await Report.find()
+      .populate('submittedBy', 'personal.firstName personal.lastName email')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch reports.' });
+  }
+});
+
+  // 3. UPDATE REPORT STATUS (Admin Only)
+app.put('/api/reports/:id/status', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const report = await Report.findByIdAndUpdate(
+      req.params.id, 
+      { status }, 
+      { new: true }
+    );
+    
+    if (!report) return res.status(404).json({ error: 'Report not found.' });
+    res.status(200).json(report);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update report.' });
   }
 });
 

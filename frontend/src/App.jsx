@@ -22,6 +22,8 @@ import TeamDetail from './pages/TeamDetail';
 import Projects from './pages/Projects';
 import CreateProject from './pages/CreateProject';
 import CreateEvent from './pages/CreateEvent';
+import SubmitReport from './pages/SubmitReport';
+import ReportsInbox from './pages/ReportsInbox';
 
 const App = () => {
   return (
@@ -49,6 +51,7 @@ const App = () => {
               <Route path="/teams/:id" element={<TeamDetail />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/create-event" element={<CreateEvent />} />
+              <Route path="/submit-report" element={<SubmitReport />} />
               
               {/* Admin-only route inside the protected layout */}
               <Route element={<ProtectedRoute adminOnly={true} />}>
@@ -56,6 +59,7 @@ const App = () => {
                 <Route path="/invite-volunteer" element={<InviteVolunteer />} />
                 <Route path="/create-team" element={<CreateTeam />} />
                 <Route path="/create-project" element={<CreateProject />} />
+                <Route path="/reports" element={<ReportsInbox />} />
               </Route>
             </Route>
           </Route>

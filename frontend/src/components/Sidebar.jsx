@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+
 import logo from "../assets/images/logo.png";
 import "./Sidebar.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Extract the user data from our JWT context
+  const { user } = useContext(AuthContext);
 
   // State to handle the dropdown toggle
   const [isPeopleMenuOpen, setIsPeopleMenuOpen] = useState(true);
@@ -43,6 +48,7 @@ const Sidebar = () => {
           </svg>
           Dashboard
         </button>
+
         {/* --- DROPDOWN NAVIGATION --- */}
         <div className="nav-dropdown-group">
           <button
@@ -93,6 +99,7 @@ const Sidebar = () => {
             </div>
           )}
         </div>
+
         <button
           className={`nav-item ${isActive("/teams")}`}
           onClick={() => navigate("/teams")}
@@ -112,6 +119,7 @@ const Sidebar = () => {
           </svg>
           Teams
         </button>
+
         <button
           className={`nav-item ${isActive("/projects")}`}
           onClick={() => navigate("/projects")}
@@ -128,68 +136,7 @@ const Sidebar = () => {
           </svg>
           Projects
         </button>
-        <button
-          className={`nav-item ${isActive("/add-beneficiary")}`}
-          onClick={() => navigate("/add-beneficiary")}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="8.5" cy="7" r="4"></circle>
-            <line x1="20" y1="8" x2="20" y2="14"></line>
-            <line x1="23" y1="11" x2="17" y2="11"></line>
-          </svg>
-          Add Beneficiary
-        </button>
-        <button
-          className={`nav-item ${isActive("/reports")}`}
-          onClick={() => navigate("/reports")}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M8 2v4"></path>
-            <path d="M16 2v4"></path>
-            <rect x="4" y="8" width="16" height="14" rx="2"></rect>
-            <path d="M9 14h6"></path>
-            <path d="M9 18h6"></path>
-            <path d="M12 11v8"></path>
-          </svg>
-          All Reports
-        </button>
-        <button
-          className={`nav-item ${isActive("/analytics")}`}
-          onClick={() => navigate("/analytics")}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="18" y1="20" x2="18" y2="10"></line>
-            <line x1="12" y1="20" x2="12" y2="4"></line>
-            <line x1="6" y1="20" x2="6" y2="14"></line>
-          </svg>
-          Analytics
-        </button>
+
         <button
           className={`nav-item ${isActive("/calendar")}`}
           onClick={() => navigate("/calendar")}
@@ -209,6 +156,7 @@ const Sidebar = () => {
           </svg>
           Calendar
         </button>
+
         <button
           className={`nav-item ${isActive("/reminders")}`}
           onClick={() => navigate("/reminders")}
@@ -226,6 +174,96 @@ const Sidebar = () => {
           </svg>
           Reminders
         </button>
+
+        {/* --- EVERYONE: REPORT ISSUE --- */}
+        <button
+          className={`nav-item ${isActive("/submit-report")}`}
+          onClick={() => navigate("/submit-report")}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+            <line x1="4" y1="22" x2="4" y2="15"></line>
+          </svg>
+          Report Issue
+        </button>
+
+        {/* --- ADMIN ONLY CONTROLS --- */}
+        {user?.role === "Admin" && (
+          <>
+            <button
+              className={`nav-item ${isActive("/reports")}`}
+              onClick={() => navigate("/reports")}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M8 2v4"></path>
+                <path d="M16 2v4"></path>
+                <rect x="4" y="8" width="16" height="14" rx="2"></rect>
+                <path d="M9 14h6"></path>
+                <path d="M9 18h6"></path>
+                <path d="M12 11v8"></path>
+              </svg>
+              All Reports
+            </button>
+
+            <button
+              className={`nav-item ${isActive("/add-beneficiary")}`}
+              onClick={() => navigate("/add-beneficiary")}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <line x1="20" y1="8" x2="20" y2="14"></line>
+                <line x1="23" y1="11" x2="17" y2="11"></line>
+              </svg>
+              Add Beneficiary
+            </button>
+
+            <button
+              className={`nav-item ${isActive("/analytics")}`}
+              onClick={() => navigate("/analytics")}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              Analytics
+            </button>
+          </>
+        )}
+
         <button
           className={`nav-item ${isActive("/settings")}`}
           onClick={() => navigate("/settings")}
@@ -248,9 +286,13 @@ const Sidebar = () => {
       </nav>
 
       <div className="sidebar-user">
-        <div className="user-avatar">O</div>
+        <div className="user-avatar">
+          {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
+        </div>
         <div className="user-info">
-          <span className="user-name">Operator</span>
+          <span className="user-name">
+            {user?.role === "Admin" ? "Administrator" : "Volunteer"}
+          </span>
         </div>
       </div>
     </aside>
