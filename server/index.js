@@ -9,6 +9,7 @@ const User = require('./models/User');
 const { verifyToken, requireAdmin } = require('./middleware/auth');
 
 const Beneficiary = require('./models/Beneficiary');
+const Team = require('./models/Team');
 
 const app = express();
 
@@ -251,6 +252,43 @@ app.get('/api/beneficiaries/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching beneficiary:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+// TEAMS & PROJECTS ROUTES
+  // 1. CREATE A TEAM (Admin Only)
+app.post('/api/teams', verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const { name, description, lead, members } = req.body;
+
+    const newTeam = new Team({
+      name,
+      description,
+      lead,
+      members
+    });
+
+    await newTeam.save();
+    res.status(201).json({ message: 'Team created successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create team.' });
+  }
+});
+
+  // 2. FETCH ALL TEAMS (Open to authenticated users)
+app.get('/api/teams', verifyToken, async (req, res) => {
+  try {
+    // .populate() pulls in the specific fields from the linked User documents
+    const teams = await Team.find()
+      .populate('lead', 'personal.firstName personal.lastName email')
+      .populate('members', 'personal.firstName personal.lastName email')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json(teams);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch teams.' });
   }
 });
 

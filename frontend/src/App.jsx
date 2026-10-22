@@ -16,6 +16,8 @@ import Reminders from './pages/Reminders';
 import AddBeneficiary from './pages/AddBeneficiary';
 import ProfileView from './pages/ProfileView';
 import BeneficiaryProfile from './pages/BeneficiaryProfile';
+import Teams from './pages/Teams';
+import CreateTeam from './pages/CreateTeam';
 
 const App = () => {
   return (
@@ -39,11 +41,13 @@ const App = () => {
               <Route path="/people/volunteers/:id" element={<ProfileView />} />
               <Route path="/calendar" element={<CalendarView />} />
               <Route path="/reminders" element={<Reminders />} />
+              <Route path="/teams" element={<Teams />} />
               
               {/* Admin-only route inside the protected layout */}
               <Route element={<ProtectedRoute adminOnly={true} />}>
                 <Route path="/add-beneficiary" element={<AddBeneficiary />} />
                 <Route path="/invite-volunteer" element={<InviteVolunteer />} />
+                <Route path="/create-team" element={<CreateTeam />} />
               </Route>
             </Route>
           </Route>
