@@ -19,6 +19,8 @@ import BeneficiaryProfile from './pages/BeneficiaryProfile';
 import Teams from './pages/Teams';
 import CreateTeam from './pages/CreateTeam';
 import TeamDetail from './pages/TeamDetail';
+import Projects from './pages/Projects';
+import CreateProject from './pages/CreateProject';
 
 const App = () => {
   return (
@@ -44,12 +46,14 @@ const App = () => {
               <Route path="/reminders" element={<Reminders />} />
               <Route path="/teams" element={<Teams />} />
               <Route path="/teams/:id" element={<TeamDetail />} />
+              <Route path="/projects" element={<Projects />} />
               
               {/* Admin-only route inside the protected layout */}
               <Route element={<ProtectedRoute adminOnly={true} />}>
                 <Route path="/add-beneficiary" element={<AddBeneficiary />} />
                 <Route path="/invite-volunteer" element={<InviteVolunteer />} />
                 <Route path="/create-team" element={<CreateTeam />} />
+                <Route path="/create-project" element={<CreateProject />} />
               </Route>
             </Route>
           </Route>
