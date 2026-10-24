@@ -244,6 +244,7 @@ const Analytics = () => {
                   <Bar dataKey="High Need" stackId="a" fill="url(#pattern-high)" />
                   <Bar dataKey="Urgent" stackId="a" fill="url(#pattern-critical)" radius={[4, 4, 0, 0]} />
                 </BarChart>
+                
               </ResponsiveContainer>
             </div>
           </div>

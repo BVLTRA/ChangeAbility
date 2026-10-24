@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "./BeneficiaryProfile.css";
@@ -89,7 +89,6 @@ const BeneficiaryProfile = () => {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          width: "100%",
         }}
       >
         <div className="header-left-cluster">

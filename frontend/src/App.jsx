@@ -5,7 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import AuthFlow from './pages/AuthFlow';
 import MainLayout from './components/MainLayout';
-import Dashboard from './components/Dashboard';
+import Dashboard from './pages/Dashboard';
 // import ReportIssue from './pages/ReportIssue'; 
 import Analytics from './pages/Analytics';
 import InviteVolunteer from './pages/InviteVolunteer';

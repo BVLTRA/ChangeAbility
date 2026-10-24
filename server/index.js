@@ -111,8 +111,8 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-  // 4. FETCH ALL USERS (Admin Only)
-app.get('/api/users', verifyToken, requireAdmin, async (req, res) => {
+  // 4. FETCH ALL USERS 
+app.get('/api/users', verifyToken, async (req, res) => {
   try {
     const users = await User.find().sort({ createdAt: -1 }).lean();
     
@@ -134,9 +134,10 @@ app.get('/api/users', verifyToken, requireAdmin, async (req, res) => {
 });
 
 
+
 // ADMIN ONLY ROUTES
-  // FETCH SINGLE USER PROFILE (Admin Only)
-app.get('/api/users/:id', verifyToken, requireAdmin, async (req, res) => {
+  // FETCH SINGLE USER PROFILE 
+app.get('/api/users/:id', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.id).lean();
     if (!user) return res.status(404).json({ error: 'User not found' });
@@ -158,6 +159,38 @@ app.delete('/api/beneficiaries/:id', verifyToken, requireAdmin, async (req, res)
     res.status(200).json({ message: 'Beneficiary deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete record.' });
+  }
+});
+
+
+
+// DASHBOARD METRICS
+app.get('/api/metrics', verifyToken, async (req, res) => {
+  try {
+    // Run all database counts simultaneously for super duper crazy fast ultra mega baby cappybara speed
+    const [
+      beneficiaryCount,
+      volunteerCount,
+      projectCount,
+      teamCount,
+      pendingTasks
+    ] = await Promise.all([
+      Beneficiary.countDocuments(),
+      User.countDocuments({ role: 'Volunteer' }),
+      Project.countDocuments({ status: 'Active' }),
+      Team.countDocuments(),
+      Event.countDocuments({ owner: req.user.id, type: 'Task', completed: false })
+    ]);
+
+    res.status(200).json({
+      beneficiaries: beneficiaryCount,
+      volunteers: volunteerCount,
+      activeProjects: projectCount,
+      teams: teamCount,
+      pendingTasks: pendingTasks
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch metrics.' });
   }
 });
 
@@ -259,6 +292,7 @@ app.get('/api/beneficiaries/:id', async (req, res) => {
 });
 
 
+
 // TEAMS & PROJECTS ROUTES
   //TEAMS
   // 1. CREATE A TEAM (Admin Only)
@@ -338,6 +372,7 @@ app.get('/api/projects', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch projects.' });
   }
 });
+
 
 
 // CALENDAR & TASKS ROUTES
