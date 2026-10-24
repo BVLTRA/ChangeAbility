@@ -133,6 +133,30 @@ app.get('/api/users', verifyToken, async (req, res) => {
   }
 });
 
+  // 5. UPDATE OWN PROFILE (Settings Page)
+app.put('/api/users/profile', verifyToken, async (req, res) => {
+  try {
+    const { firstName, lastName, phone } = req.body;
+    
+    // Update the personal object for the logged-in user
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { 
+        $set: { 
+          'personal.firstName': firstName, 
+          'personal.lastName': lastName, 
+          'personal.phone': phone 
+        } 
+      },
+      { new: true }
+    ).select('-password'); // Return everything except the password hash
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update profile details.' });
+  }
+});
+
 
 
 // ADMIN ONLY ROUTES

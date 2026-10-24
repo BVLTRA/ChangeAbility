@@ -1,21 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
-// --- CHANGEABILITY MOCK DATA ---
-const statusData = [
-  { name: 'Referral', count: 14 },
-  { name: 'Assessed', count: 8 },
-  { name: 'In Support', count: 22 },
-  { name: 'Assisted', count: 35 },
-  { name: 'Closed', count: 42 },
-];
-
-const vulnerabilityData = [
-  { name: 'Routine', value: 40, patternId: 'pattern-low', color: '#4ade80' },
-  { name: 'Moderate', value: 30, patternId: 'pattern-medium', color: '#facc15' },
-  { name: 'High Need', value: 15, patternId: 'pattern-high', color: '#fb923c' },
-  { name: 'Urgent', value: 5, patternId: 'pattern-critical', color: '#ef4444' },
-];
+import { AuthContext } from '../context/AuthContext';
 
 const SharedDefs = () => (
   <defs>
@@ -23,33 +8,57 @@ const SharedDefs = () => (
       <rect width="6" height="6" fill="#ffffff" fillOpacity="0.05" />
       <line x1="0" y1="0" x2="0" y2="6" stroke="#ffffff" strokeOpacity="0.25" strokeWidth="2" />
     </pattern>
-    <pattern id="pattern-low" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-      <rect width="6" height="6" fill="#4ade80" fillOpacity="0.08" />
-      <line x1="0" y1="0" x2="0" y2="6" stroke="#4ade80" strokeOpacity="0.35" strokeWidth="2" />
-    </pattern>
-    <pattern id="pattern-medium" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-      <rect width="6" height="6" fill="#facc15" fillOpacity="0.08" />
-      <line x1="0" y1="0" x2="0" y2="6" stroke="#facc15" strokeOpacity="0.35" strokeWidth="2" />
-    </pattern>
-    <pattern id="pattern-high" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-      <rect width="6" height="6" fill="#fb923c" fillOpacity="0.08" />
-      <line x1="0" y1="0" x2="0" y2="6" stroke="#fb923c" strokeOpacity="0.35" strokeWidth="2" />
-    </pattern>
-    <pattern id="pattern-critical" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-      <rect width="6" height="6" fill="#ef4444" fillOpacity="0.08" />
-      <line x1="0" y1="0" x2="0" y2="6" stroke="#ef4444" strokeOpacity="0.35" strokeWidth="2" />
-    </pattern>
+    <pattern id="pattern-low" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="#4ade80" fillOpacity="0.08" /><line x1="0" y1="0" x2="0" y2="6" stroke="#4ade80" strokeOpacity="0.35" strokeWidth="2" /></pattern>
+    <pattern id="pattern-medium" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="#facc15" fillOpacity="0.08" /><line x1="0" y1="0" x2="0" y2="6" stroke="#facc15" strokeOpacity="0.35" strokeWidth="2" /></pattern>
+    <pattern id="pattern-high" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fb923c" fillOpacity="0.08" /><line x1="0" y1="0" x2="0" y2="6" stroke="#fb923c" strokeOpacity="0.35" strokeWidth="2" /></pattern>
+    <pattern id="pattern-critical" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="#ef4444" fillOpacity="0.08" /><line x1="0" y1="0" x2="0" y2="6" stroke="#ef4444" strokeOpacity="0.35" strokeWidth="2" /></pattern>
   </defs>
 );
 
 const ChartsPanel = () => {
+  const { token } = useContext(AuthContext);
+  const [statusData, setStatusData] = useState([]);
+  const [vulnData, setVulnData] = useState([]);
+
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/beneficiaries', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const beneficiaries = await response.json();
+          
+          const sCounts = { 'Referral': 0, 'Assessed': 0, 'In Support': 0, 'Assisted': 0, 'Closed': 0 };
+          const vCounts = { 'Routine': 0, 'Moderate': 0, 'High Need': 0, 'Urgent': 0 };
+
+          beneficiaries.forEach(b => {
+            if (sCounts[b.status] !== undefined) sCounts[b.status]++;
+            if (vCounts[b.vulnerability] !== undefined) vCounts[b.vulnerability]++;
+          });
+
+          setStatusData(Object.keys(sCounts).map(key => ({ name: key, count: sCounts[key] })));
+          
+          setVulnData([
+            { name: 'Routine', value: vCounts['Routine'], patternId: 'pattern-low', color: '#4ade80' },
+            { name: 'Moderate', value: vCounts['Moderate'], patternId: 'pattern-medium', color: '#facc15' },
+            { name: 'High Need', value: vCounts['High Need'], patternId: 'pattern-high', color: '#fb923c' },
+            { name: 'Urgent', value: vCounts['Urgent'], patternId: 'pattern-critical', color: '#ef4444' },
+          ]);
+        }
+      } catch (error) {
+        console.error("Failed to load chart data");
+      }
+    };
+    if (token) fetchChartData();
+  }, [token]);
+
   return (
     <div className="charts-grid">
-      {/* BAR CHART */}
       <div className="chart-panel bar-panel">
         <div className="chart-header">
           <h2>Cases by Status</h2>
-          <p>Distribution across community assistance stages</p>
+          <p>Live distribution across community assistance stages</p>
         </div>
         <div className="chart-wrapper">
           <ResponsiveContainer width="100%" height="100%">
@@ -64,18 +73,17 @@ const ChartsPanel = () => {
         </div>
       </div>
 
-      {/* DONUT CHART */}
       <div className="chart-panel donut-panel">
         <div className="chart-header">
           <h2>Vulnerability Assessment</h2>
-          <p>Breakdown by level of urgency or need</p>
+          <p>Live breakdown by level of urgency or need</p>
         </div>
         <div className="chart-wrapper">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <SharedDefs />
-              <Pie data={vulnerabilityData} cx="50%" cy="50%" innerRadius={65} outerRadius={90} paddingAngle={4} dataKey="value" stroke="none">
-                {vulnerabilityData.map((entry, index) => (
+              <Pie data={vulnData} cx="50%" cy="50%" innerRadius={65} outerRadius={90} paddingAngle={4} dataKey="value" stroke="none">
+                {vulnData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={`url(#${entry.patternId})`} />
                 ))}
               </Pie>
@@ -84,10 +92,10 @@ const ChartsPanel = () => {
           </ResponsiveContainer>
         </div>
         <div className="donut-legend">
-          {vulnerabilityData.map((entry, index) => (
+          {vulnData.map((entry, index) => (
             <div key={index} className="legend-item">
               <span className="legend-dot" style={{ backgroundColor: entry.color }}></span>
-              <span className="legend-label">{entry.name}</span>
+              <span className="legend-label">{entry.name} ({entry.value})</span>
             </div>
           ))}
         </div>

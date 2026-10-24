@@ -24,6 +24,7 @@ import CreateProject from './pages/CreateProject';
 import CreateEvent from './pages/CreateEvent';
 import SubmitReport from './pages/SubmitReport';
 import ReportsInbox from './pages/ReportsInbox';
+import Settings from './pages/Settings';
 
 const App = () => {
   return (
@@ -52,6 +53,7 @@ const App = () => {
               <Route path="/projects" element={<Projects />} />
               <Route path="/create-event" element={<CreateEvent />} />
               <Route path="/submit-report" element={<SubmitReport />} />
+              <Route path="/settings" element={<Settings />} />
               
               {/* Admin-only route inside the protected layout */}
               <Route element={<ProtectedRoute adminOnly={true} />}>
