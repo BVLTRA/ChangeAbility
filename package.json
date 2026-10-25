@@ -1,0 +1,11 @@
+{
+  "name": "changeability-unified",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server/index.js",
+    "build": "cd frontend && npm install && npm run build && cd ../server && npm install"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}

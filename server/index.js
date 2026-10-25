@@ -540,6 +540,18 @@ app.put('/api/reports/:id/status', verifyToken, requireAdmin, async (req, res) =
 
 // Initialise Server
 const PORT = process.env.PORT || 5000;
+
+// --- PRODUCTION FRONTEND SERVING ---
+const path = require('path');
+
+// Serve static files from React app's build directory
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Catch-all route: Send any unknown requests back to React's index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`ChangeAbility backend listening on port ${PORT}`);
 });
