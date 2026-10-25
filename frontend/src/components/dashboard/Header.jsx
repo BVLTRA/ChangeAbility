@@ -9,7 +9,8 @@ const Header = () => {
   return (
     <header className="viewport-header">
       <div>
-        <h1 className="current-page-title">Welcome back, {user?.role === 'Admin' ? 'Administrator' : 'Operator'}</h1>
+        {/* Dynamically greets the user by their first name, falling back to 'Operator' if missing */}
+        <h1 className="current-page-title">Welcome back, {user?.firstName || 'Operator'}</h1>
         <p style={{ color: '#888', margin: '4px 0 0 0', fontSize: '13px' }}>
           Here is your operational overview for today.
         </p>

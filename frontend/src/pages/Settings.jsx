@@ -3,9 +3,13 @@ import { AuthContext } from '../context/AuthContext';
 
 const Settings = () => {
   const { token, user } = useContext(AuthContext);
+  
+  // State
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
+  const [teamRole, setTeamRole] = useState('General Volunteer');
+  
   const [theme, setTheme] = useState('dark');
   const [status, setStatus] = useState('');
 
@@ -22,6 +26,9 @@ const Settings = () => {
             setLastName(data.personal.lastName || '');
             setPhone(data.personal.phone || '');
           }
+          if (data.teamRole) {
+            setTeamRole(data.teamRole);
+          }
         }
       } catch (error) {
         console.error('Failed to load profile');
@@ -37,7 +44,8 @@ const Settings = () => {
       const response = await fetch('http://localhost:5000/api/users/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ firstName, lastName, phone })
+        // We now include teamRole in the outgoing payload
+        body: JSON.stringify({ firstName, lastName, phone, teamRole })
       });
       if (response.ok) {
         setStatus('Profile updated successfully.');
@@ -63,17 +71,32 @@ const Settings = () => {
             <form className="report-form" onSubmit={handleUpdate}>
               {status && <div style={{ color: status.includes('success') ? '#4ade80' : '#facc15', marginBottom: '16px', fontSize: '13px' }}>{status}</div>}
               
-              <div className="form-group full-width">
-                <label>First Name</label>
-                <input type="text" className="form-input" value={firstName} onChange={e => setFirstName(e.target.value)} required />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div className="form-group full-width">
+                  <label>First Name</label>
+                  <input type="text" className="form-input" value={firstName} onChange={e => setFirstName(e.target.value)} required />
+                </div>
+                <div className="form-group full-width">
+                  <label>Last Name</label>
+                  <input type="text" className="form-input" value={lastName} onChange={e => setLastName(e.target.value)} required />
+                </div>
               </div>
-              <div className="form-group full-width" style={{ marginTop: '12px' }}>
-                <label>Last Name</label>
-                <input type="text" className="form-input" value={lastName} onChange={e => setLastName(e.target.value)} required />
-              </div>
+
               <div className="form-group full-width" style={{ marginTop: '12px' }}>
                 <label>Phone Number</label>
                 <input type="text" className="form-input" value={phone} onChange={e => setPhone(e.target.value)} />
+              </div>
+
+              <div className="form-group full-width" style={{ marginTop: '12px' }}>
+                <label>Primary Responsibility</label>
+                <select className="form-input" value={teamRole} onChange={(e) => setTeamRole(e.target.value)} style={{ backgroundColor: '#050505', color: '#fff' }}>
+                  <option value="General Volunteer">General Volunteer</option>
+                  <option value="Logistics & Transport">Logistics & Transport</option>
+                  <option value="Kitchen / Food Prep">Kitchen / Food Prep</option>
+                  <option value="Field Activations">Field Activations</option>
+                  <option value="Medical / Care">Medical / Care</option>
+                  <option value="Administrative">Administrative</option>
+                </select>
               </div>
               
               <button type="submit" className="btn-primary" style={{ marginTop: '24px', width: '100%' }}>Update Profile</button>

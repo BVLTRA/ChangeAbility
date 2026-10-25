@@ -17,7 +17,11 @@ const Report = require('./models/Report');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Explicitly trust Vite frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 app.use(express.json()); // Parses incoming JSON payloads
 
 // MongoDB Connection
@@ -57,18 +61,23 @@ app.post('/api/auth/invite', verifyToken, requireAdmin, async (req, res) => {
   // Open route: The volunteer is unauthenticated at this point
 app.post('/api/auth/claim', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    // Extract the new profile fields from the incoming request
+    const { email, password, firstName, lastName, phone, teamRole } = req.body;
 
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: 'No invitation found for this email.' });
     if (user.status === 'Active') return res.status(400).json({ error: 'Account already claimed. Please log in.' });
 
-    // Hash the password mechanically (10 salt rounds is the industry standard balance of speed/security)
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     user.password = hashedPassword;
     user.status = 'Active';
+    
+    // Save the extended profile data
+    user.personal = { firstName, lastName, phone };
+    user.teamRole = teamRole || 'Unassigned';
+    
     await user.save();
 
     res.status(200).json({ message: 'Account successfully claimed and activated.' });
@@ -96,7 +105,8 @@ app.post('/api/auth/login', async (req, res) => {
     // Construct the JWT payload
     const payload = {
       id: user._id,
-      role: user.role
+      role: user.role,
+      firstName: user.personal?.firstName
     };
 
     // Sign the token (expires in 24 hours)
@@ -104,7 +114,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     res.status(200).json({
       token,
-      user: { id: user._id, email: user.email, role: user.role }
+      user: { id: user._id, email: user.email, role: user.role, firstName: user.personal?.firstName }
     });
   } catch (error) {
     res.status(500).json({ error: 'Server error during login.' });
@@ -136,20 +146,21 @@ app.get('/api/users', verifyToken, async (req, res) => {
   // 5. UPDATE OWN PROFILE (Settings Page)
 app.put('/api/users/profile', verifyToken, async (req, res) => {
   try {
-    const { firstName, lastName, phone } = req.body;
+    // Add teamRole to the destructured body
+    const { firstName, lastName, phone, teamRole } = req.body;
     
-    // Update the personal object for the logged-in user
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { 
         $set: { 
           'personal.firstName': firstName, 
           'personal.lastName': lastName, 
-          'personal.phone': phone 
+          'personal.phone': phone,
+          'teamRole': teamRole // Save the updated responsibility
         } 
       },
       { new: true }
-    ).select('-password'); // Return everything except the password hash
+    ).select('-password');
 
     res.status(200).json(updatedUser);
   } catch (error) {
@@ -288,6 +299,7 @@ app.get('/api/beneficiaries', async (req, res) => {
       need: b.disability?.category || 'General Support',
       subNeed: b.disability?.name || 'Pending assessment',
       status: b.status || 'Referral',
+      vulnerability: b.vulnerability || 'Routine',
       // Format date (DD/MM/YY)
       date: new Date(b.createdAt).toLocaleDateString('en-GB'),
       // Auto-generate an avatar with their initials
