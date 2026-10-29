@@ -14,7 +14,7 @@ const SubmitReport = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/reports", {
+      const response = await fetch("/api/reports", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

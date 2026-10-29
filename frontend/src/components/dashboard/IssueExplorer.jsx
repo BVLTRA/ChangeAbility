@@ -10,7 +10,7 @@ const IssueExplorer = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/reports', {
+        const response = await fetch('/api/reports', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.ok) {

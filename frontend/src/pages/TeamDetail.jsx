@@ -13,7 +13,7 @@ const TeamDetail = () => {
   useEffect(() => {
     const fetchTeam = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/teams/${id}`, {
+        const response = await fetch(`/api/teams/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {

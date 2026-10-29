@@ -64,7 +64,7 @@ const AddBeneficiary = () => {
     
     try {
       // Shoot the data to your local backend
-      const response = await fetch('http://localhost:5000/api/beneficiaries', {
+      const response = await fetch('/api/beneficiaries', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ const Beneficiaries = () => {
   useEffect(() => {
     const fetchBeneficiaries = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/beneficiaries");
+        const response = await fetch("/api/beneficiaries");
         const data = await response.json();
         setBeneficiaries(data); // Inject the database response into the state
       } catch (error) {

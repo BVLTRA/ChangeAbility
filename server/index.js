@@ -18,7 +18,10 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Explicitly trust Vite frontend
+  origin: [
+    'http://localhost:5173', 
+    'https://changeability-app-1aaa3caf4d82.herokuapp.com'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));

@@ -13,7 +13,7 @@ const MetricsGrid = () => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/metrics", {
+        const response = await fetch("/api/metrics", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) setMetrics(await response.json());

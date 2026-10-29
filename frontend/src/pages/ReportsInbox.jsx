@@ -8,7 +8,7 @@ const ReportsInbox = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/reports", {
+        const response = await fetch("/api/reports", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) setReports(await response.json());
@@ -22,7 +22,7 @@ const ReportsInbox = () => {
   const updateStatus = async (id, newStatus) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/reports/${id}/status`,
+        `/api/reports/${id}/status`,
         {
           method: "PUT",
           headers: {

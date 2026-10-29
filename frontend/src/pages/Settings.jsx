@@ -16,7 +16,7 @@ const Settings = () => {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/${user.id}`, {
+        const response = await fetch(`/api/users/${user.id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.ok) {
@@ -41,7 +41,7 @@ const Settings = () => {
     e.preventDefault();
     setStatus('Saving...');
     try {
-      const response = await fetch('http://localhost:5000/api/users/profile', {
+      const response = await fetch('/api/users/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         // We now include teamRole in the outgoing payload

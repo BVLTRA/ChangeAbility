@@ -10,7 +10,7 @@ const ReminderList = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/events", {
+        const response = await fetch("/api/events", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {
@@ -34,7 +34,7 @@ const ReminderList = () => {
     );
 
     // Backend sync
-    await fetch(`http://localhost:5000/api/events/${id}/toggle`, {
+    await fetch(`/api/events/${id}/toggle`, {
       method: "PUT",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -50,7 +50,7 @@ const ReminderList = () => {
       };
 
       try {
-        const response = await fetch("http://localhost:5000/api/events", {
+        const response = await fetch("/api/events", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

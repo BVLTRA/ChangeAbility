@@ -39,7 +39,7 @@ const ChartsPanel = () => {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/beneficiaries', {
+        const response = await fetch('/api/beneficiaries', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.ok) {

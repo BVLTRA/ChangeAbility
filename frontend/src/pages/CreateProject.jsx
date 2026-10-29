@@ -26,10 +26,10 @@ const CreateProject = () => {
     const fetchData = async () => {
       try {
         const [teamsRes, beneficiariesRes] = await Promise.all([
-          fetch("http://localhost:5000/api/teams", {
+          fetch("/api/teams", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://localhost:5000/api/beneficiaries", {
+          fetch("/api/beneficiaries", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -55,7 +55,7 @@ const CreateProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/projects", {
+      const response = await fetch("/api/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

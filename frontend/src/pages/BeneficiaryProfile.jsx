@@ -14,7 +14,7 @@ const BeneficiaryProfile = () => {
     const fetchProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/beneficiaries/${id}`,
+          `/api/beneficiaries/${id}`,
         );
         if (response.ok) {
           const data = await response.json();
@@ -66,7 +66,7 @@ const BeneficiaryProfile = () => {
     if (confirmDelete) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/beneficiaries/${id}`,
+          `/api/beneficiaries/${id}`,
           {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },

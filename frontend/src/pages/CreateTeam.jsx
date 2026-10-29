@@ -17,7 +17,7 @@ const CreateTeam = () => {
     // Pull the staff roster to populate our selection lists
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/users", {
+        const response = await fetch("/api/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {
@@ -42,7 +42,7 @@ const CreateTeam = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/teams", {
+      const response = await fetch("/api/teams", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

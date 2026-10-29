@@ -19,11 +19,11 @@ const ProfileView = () => {
     const fetchFullProfile = async () => {
       try {
         // 1. Fetch Core Profile
-        const userRes = await fetch(`http://localhost:5000/api/users/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const userRes = await fetch(`/api/users/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
         if (userRes.ok) setProfileData(await userRes.json());
 
         // 2. Fetch all Teams and filter for this user
-        const teamsRes = await fetch(`http://localhost:5000/api/teams`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const teamsRes = await fetch(`/api/teams`, { headers: { 'Authorization': `Bearer ${token}` } });
         let relevantTeams = [];
         if (teamsRes.ok) {
           const allTeams = await teamsRes.json();
@@ -32,7 +32,7 @@ const ProfileView = () => {
         }
 
         // 3. Fetch all Projects and filter for those teams
-        const projRes = await fetch(`http://localhost:5000/api/projects`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const projRes = await fetch(`/api/projects`, { headers: { 'Authorization': `Bearer ${token}` } });
         if (projRes.ok) {
           const allProj = await projRes.json();
           const teamIds = relevantTeams.map(t => t._id);
@@ -41,7 +41,7 @@ const ProfileView = () => {
 
         // 4. Fetch User's Tasks (Requires Admin or self)
         if (user.role === 'Admin' || user.id === id) {
-          const tasksRes = await fetch(`http://localhost:5000/api/events?targetUserId=${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+          const tasksRes = await fetch(`/api/events?targetUserId=${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
           if (tasksRes.ok) {
             const events = await tasksRes.json();
             setUserTasks(events.filter(e => e.type === 'Task'));
