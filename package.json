@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node server/index.js",
-    "build": "cd frontend && npm install && npm run build && cd ../server && npm install"
+    "build": "cd frontend && npm install --include=dev && npm run build && cd ../server && npm install"
   },
   "engines": {
     "node": "20.x"
